@@ -6,12 +6,12 @@
 
             <CheckBoxPreference
                 android:key="widget_bright"
-                android:title="@string/setting_widget_bright"
+                android:title="@string/setting_bright"
                 android:defaultValue="false" />
 
             <CheckBoxPreference
                 android:key="widget_strobe"
-                android:title="@string/setting_widget_strobe"
+                android:title="@string/setting_strobe"
                 android:defaultValue="false" />    
 
                     <net.cactii.flash2.SeekBarPreference 

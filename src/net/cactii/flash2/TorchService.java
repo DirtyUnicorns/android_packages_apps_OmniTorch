@@ -36,9 +36,9 @@ public class TorchService extends Service {
 
     private Notification.Builder mNotificationBuilder;
 
-    private boolean mBright;
-
     private int mStrobePeriod;
+    
+    private int mBright;
 
     private IntentReceiver mReceiver;
 
@@ -56,7 +56,7 @@ public class TorchService extends Service {
 
         this.mTorchTask = new TimerTask() {
             public void run() {
-                FlashDevice.instance(mContext).setFlashMode(mBright ? FlashDevice.DEATH_RAY : FlashDevice.ON);
+                FlashDevice.instance(mContext).setFlashMode(FlashDevice.ON, mBright);
             }
         };
         this.mTorchTimer = new Timer();
@@ -66,13 +66,13 @@ public class TorchService extends Service {
 
             @Override
             public void run() {
-                int flashMode = mBright ? FlashDevice.DEATH_RAY : FlashDevice.ON;
+                int flashMode = FlashDevice.ON;
                 if (FlashDevice.instance(mContext).getFlashMode() < flashMode) {
                     if (this.mCounter-- < 1) {
-                        FlashDevice.instance(mContext).setFlashMode(flashMode);
+                        FlashDevice.instance(mContext).setFlashMode(flashMode, mBright);
                     }
                 } else {
-                    FlashDevice.instance(mContext).setFlashMode(FlashDevice.STROBE);
+                    FlashDevice.instance(mContext).setFlashMode(FlashDevice.STROBE, mBright);
                     this.mCounter = 4;
                 }
             }
@@ -98,9 +98,6 @@ public class TorchService extends Service {
         } else {
             this.mTorchTimer.schedule(this.mTorchTask, 0, 100);
         }
-
-        this.mReceiver = new IntentReceiver();
-        registerReceiver(mReceiver, new IntentFilter("net.cactii.flash2.SET_STROBE"));
 
         mNotificationBuilder = new Notification.Builder(this);
         mNotificationBuilder.setSmallIcon(R.drawable.notification_icon);
@@ -130,7 +127,7 @@ public class TorchService extends Service {
         stopForeground(true);
         this.mTorchTimer.cancel();
         this.mStrobeTimer.cancel();
-        FlashDevice.instance(mContext).setFlashMode(FlashDevice.OFF);
+        FlashDevice.instance(mContext).setFlashMode(FlashDevice.OFF, mBright);
         updateState(false);
     }
 
@@ -163,20 +160,5 @@ public class TorchService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    public class IntentReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            mHandler.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    Reshedule(intent.getIntExtra("period", 200));
-                }
-
-            });
-        }
     }
 }

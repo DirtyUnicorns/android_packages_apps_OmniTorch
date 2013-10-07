@@ -32,9 +32,10 @@
     <string name="label_strobe">Strobe</string>
     <string name="label_frequency">Frequency: (slide to change)</string>
 
-    <string name="widget_options">General options</string>
-    <string name="setting_widget_bright">Bright widget</string>
-    <string name="setting_widget_strobe">Strobe flash</string>
+    <string name="options">Settings</string>
+    <string name="widget_options">Widget options</string>
+    <string name="setting_bright">Bright</string>
+    <string name="setting_strobe">Strobe flash</string>
     <string name="setting_frequency_title">Strobe frequency</string>
     <string name="setting_frequency_dialog">Frequency</string>
     <string name="setting_frequency_hz" translatable="false"> Hz</string>
@@ -42,4 +43,5 @@
 
     <string name="not_torch_title">Torch on</string>
     <string name="not_torch_toggle">Turn torch off</string>
+
 </resources>

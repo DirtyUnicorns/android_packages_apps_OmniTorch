@@ -30,7 +30,7 @@ public class WidgetOptionsActivity extends PreferenceActivity implements
     //No need to go to fragments right now
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.layout.optionsview);
+        addPreferencesFromResource(R.layout.widgets_options);
         this.mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -104,7 +104,7 @@ public class WidgetOptionsActivity extends PreferenceActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.widget, menu);
+        inflater.inflate(R.menu.widget_menu, menu);
         return true;
     }
 
