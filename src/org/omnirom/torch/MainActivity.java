@@ -42,6 +42,7 @@ public class MainActivity extends Activity {
 	
 	private TorchWidgetProvider mWidgetProvider;
 	private ImageView mButtonOnView;
+	private ImageView mButtonSosView;
 	private boolean mTorchOn;
 	private Context mContext;
 	private SharedPreferences mPrefs;
@@ -60,11 +61,14 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		mButtonOnView.setOnTouchListener(new View.OnTouchListener() {
-			public boolean onTouch(View view, MotionEvent motionEvent) {
-				return false;
+		mButtonSosView = (ImageView) findViewById(R.id.buttoSosImage);
+
+		mButtonSosView.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				createSosIntent();
 			}
 		});
+		
 		mTorchOn = false;
 		mWidgetProvider = TorchWidgetProvider.getInstance();
 
@@ -80,6 +84,16 @@ public class MainActivity extends Activity {
 		intent.putExtra("period", mPrefs.getInt(SettingsActivity.KEY_STROBE_FREQ, 5));
 		intent.putExtra("bright", mPrefs.getBoolean(SettingsActivity.KEY_BRIGHT, false));
 		intent.putExtra("sos", mPrefs.getBoolean(SettingsActivity.KEY_SOS, false));
+		mContext.sendBroadcast(intent);
+	}
+
+	private void createSosIntent() {
+		Log.d(TAG, mPrefs.getAll().toString());
+		Intent intent = new Intent(TorchSwitch.TOGGLE_FLASHLIGHT);
+		intent.putExtra("strobe", mPrefs.getBoolean(SettingsActivity.KEY_STROBE, false));
+		intent.putExtra("period", mPrefs.getInt(SettingsActivity.KEY_STROBE_FREQ, 5));
+		intent.putExtra("bright", mPrefs.getBoolean(SettingsActivity.KEY_BRIGHT, false));
+		intent.putExtra("sos", true);
 		mContext.sendBroadcast(intent);
 	}
 
@@ -137,7 +151,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void updateBigButtonState() {
-		mButtonOnView.setImageResource(mTorchOn ? R.drawable.bulb_on : R.drawable.bulb_off);
+		mButtonOnView.setImageResource(mTorchOn ? R.drawable.button_off : R.drawable.button_on);
 	}
 
 	private BroadcastReceiver mStateReceiver = new BroadcastReceiver() {
