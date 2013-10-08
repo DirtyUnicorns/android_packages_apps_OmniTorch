@@ -88,6 +88,10 @@ public class MainActivity extends Activity {
 	}
 
 	private void createSosIntent() {
+        if (mTorchOn){
+            // stop it first
+            createIntent();
+        }
 		Log.d(TAG, mPrefs.getAll().toString());
 		Intent intent = new Intent(TorchSwitch.TOGGLE_FLASHLIGHT);
 		intent.putExtra("strobe", mPrefs.getBoolean(SettingsActivity.KEY_STROBE, false));

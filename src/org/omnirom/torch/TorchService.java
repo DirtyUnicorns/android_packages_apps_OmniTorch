@@ -105,7 +105,9 @@ public class TorchService extends Service {
 					default:
 						return;
 				}
-				mSosTimer.schedule(mSosTask, schedTime);
+                if (mSosTimer != null){
+				    mSosTimer.schedule(mSosTask, schedTime);
+                }
 			}
 		};
 
@@ -117,7 +119,9 @@ public class TorchService extends Service {
 				if (mSosCount == 9){
 					mSosCount = 0;
 				}
-				mSosTimer.schedule(mSosTask, mSosCount == 0 ? 2000:200);
+                if (mSosTimer != null){
+				    mSosTimer.schedule(mSosTask, mSosCount == 0 ? 2000:200);
+                }
 			}
 		};
 
@@ -183,8 +187,11 @@ public class TorchService extends Service {
 		mNotificationManager.cancelAll();
 		stopForeground(true);
 		mTorchTimer.cancel();
+        mTorchTimer = null;
 		mStrobeTimer.cancel();
+        mStrobeTimer = null;
 		mSosTimer.cancel();
+        mSosTimer = null;
 		FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.OFF, mBright);
 		updateState(false);
 	}

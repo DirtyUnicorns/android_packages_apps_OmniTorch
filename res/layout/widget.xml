@@ -30,15 +30,13 @@
         android:background="@drawable/appwidget_button"
         android:clickable="true"
         android:focusable="true"
-        android:orientation="vertical"
-        android:paddingTop="12.0dip" >
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/img_torch"
             android:layout_width="match_parent"
             android:layout_height="0.0dip"
             android:layout_weight="1.0"
-            android:paddingTop="16.0dip"
             android:scaleType="center"
             android:src="@drawable/torch_off" />
 
