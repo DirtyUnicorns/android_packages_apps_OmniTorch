@@ -10,18 +10,17 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.widget.RemoteViews;
 
 public class TorchWidgetProvider extends AppWidgetProvider {
 
-    private static TorchWidgetProvider sInstance;
+    private static TorchWidgetProvider mInstance;
 
     static synchronized TorchWidgetProvider getInstance() {
-        if (sInstance == null) {
-            sInstance = new TorchWidgetProvider();
+        if (mInstance == null) {
+            mInstance = new TorchWidgetProvider();
         }
-        return sInstance;
+        return mInstance;
     }
 
     private enum WidgetState {

@@ -9,75 +9,65 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.ToggleButton;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
     private TorchWidgetProvider mWidgetProvider;
-
-    // On button
-    private ToggleButton buttonOn;
-
+    private ImageView mButtonOnView;
     private boolean mTorchOn;
-
-    private Context context;
-
-    // Preferences
+    private Context mContext;
     private SharedPreferences mPrefs;
-    
-    // Labels
-    private String labelOn = null;
-    private String labelOff = null;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainnew);
-        context = this.getApplicationContext();
-        buttonOn = (ToggleButton) findViewById(R.id.buttonOn);
+        mContext = this.getApplicationContext();
+        mButtonOnView = (ImageView) findViewById(R.id.buttoOnImage);
 
+        mButtonOnView.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                createIntent();
+            }
+        });
+
+        mButtonOnView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
         mTorchOn = false;
-
-        labelOn = this.getString(R.string.label_on);
-        labelOff = this.getString(R.string.label_off);
-
         mWidgetProvider = TorchWidgetProvider.getInstance();
 
         // Preferences
         this.mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        updateBigButtonState();
+    }
 
-        buttonOn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TorchSwitch.TOGGLE_FLASHLIGHT);
-                intent.putExtra("strobe", this.mPrefs.getBoolean("strobe", false));
-                intent.putExtra("period", this.mPrefs.getInt("strobeperiod", 100));
-                intent.putExtra("bright", this.mPrefs.getBoolean("bright", false));
-                context.sendBroadcast(intent);
-            }
-        });
+    private void createIntent() {
+        Intent intent = new Intent(TorchSwitch.TOGGLE_FLASHLIGHT);
+        intent.putExtra("strobe", mPrefs.getBoolean(SettingsActivity.KEY_STROBE, false));
+        intent.putExtra("period", mPrefs.getInt(SettingsActivity.KEY_STROBE_FREQ, 5));
+        intent.putExtra("bright", mPrefs.getBoolean(SettingsActivity.KEY_BRIGHT, false));
+        mContext.sendBroadcast(intent);
     }
 
     public void onPause() {
         this.updateWidget();
-        context.unregisterReceiver(mStateReceiver);
+        mContext.unregisterReceiver(mStateReceiver);
         super.onPause();
     }
 
@@ -89,7 +79,7 @@ public class MainActivity extends Activity {
     public void onResume() {
         updateBigButtonState();
         this.updateWidget();
-        context.registerReceiver(mStateReceiver, new IntentFilter(TorchSwitch.TORCH_STATE_CHANGED));
+        mContext.registerReceiver(mStateReceiver, new IntentFilter(TorchSwitch.TORCH_STATE_CHANGED));
         super.onResume();
     }
 
@@ -107,7 +97,7 @@ public class MainActivity extends Activity {
                 this.openAboutDialog();
                 return true;
             case R.id.action_settings:
-                Intent intent = new Intent(this, OptionsActivity.class);
+                Intent intent = new Intent(this, SettingsActivity.class);
                 startActivityIfNeeded(intent, -1);
             default:
                 return super.onOptionsItemSelected(item);
@@ -117,8 +107,7 @@ public class MainActivity extends Activity {
     private void openAboutDialog() {
         LayoutInflater li = LayoutInflater.from(this);
         View view = li.inflate(R.layout.aboutview, null);
-        new AlertDialog.Builder(MainActivity    <string name="setting_widget_bright">Bright widget</string>
-    <string name="setting_widget_strobe">Strobe flash</string>.this).setTitle(this.getString(R.string.about_title)).setView(view)
+        new AlertDialog.Builder(MainActivity.this).setTitle(this.getString(R.string.about_title)).setView(view)
                 .setNegativeButton(this.getString(R.string.about_close), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         // Log.d(MSG_TAG, "Close pressed");
@@ -127,11 +116,11 @@ public class MainActivity extends Activity {
     }
 
     public void updateWidget() {
-        this.mWidgetProvider.updateAllStates(context);
+        this.mWidgetProvider.updateAllStates(mContext);
     }
 
     private void updateBigButtonState() {
-        buttonOn.setChecked(mTorchOn);
+        mButtonOnView.setImageResource(mTorchOn ? R.drawable.bulb_on : R.drawable.bulb_off);
     }
 
     private BroadcastReceiver mStateReceiver = new BroadcastReceiver() {

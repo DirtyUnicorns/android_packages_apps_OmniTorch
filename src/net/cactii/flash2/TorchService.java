@@ -4,13 +4,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.util.Log;
 
 import java.util.Timer;
@@ -18,32 +15,19 @@ import java.util.TimerTask;
 
 public class TorchService extends Service {
 
-    private static final String MSG_TAG = "TorchRoot";
+    private static final String TAG = "TorchRoot";
 
     private Handler mHandler;
-
     private TimerTask mTorchTask;
-
     private Timer mTorchTimer;
-
     private WrapperTask mStrobeTask;
-
     private Timer mStrobeTimer;
-
     private NotificationManager mNotificationManager;
-
     private Notification mNotification;
-
     private Notification.Builder mNotificationBuilder;
-
     private int mStrobePeriod;
-    
-    private int mBright;
-
-    private IntentReceiver mReceiver;
-
+    private boolean mBright;
     private Runnable mStrobeRunnable;
-
     private Context mContext;
 
     public void onCreate() {
@@ -56,7 +40,7 @@ public class TorchService extends Service {
 
         this.mTorchTask = new TimerTask() {
             public void run() {
-                FlashDevice.instance(mContext).setFlashMode(FlashDevice.ON, mBright);
+                FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.ON, mBright);
             }
         };
         this.mTorchTimer = new Timer();
@@ -67,12 +51,12 @@ public class TorchService extends Service {
             @Override
             public void run() {
                 int flashMode = FlashDevice.ON;
-                if (FlashDevice.instance(mContext).getFlashMode() < flashMode) {
+                if (FlashDevice.getInstance(mContext).getFlashMode() == FlashDevice.STROBE) {
                     if (this.mCounter-- < 1) {
-                        FlashDevice.instance(mContext).setFlashMode(flashMode, mBright);
+                        FlashDevice.getInstance(mContext).setFlashMode(flashMode, mBright);
                     }
                 } else {
-                    FlashDevice.instance(mContext).setFlashMode(FlashDevice.STROBE, mBright);
+                    FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.STROBE, mBright);
                     this.mCounter = 4;
                 }
             }
@@ -86,14 +70,18 @@ public class TorchService extends Service {
 
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.d(MSG_TAG, "Starting torch");
+        Log.d(TAG, "Starting torch");
         if (intent == null) {
             this.stopSelf();
             return START_NOT_STICKY;
         }
         this.mBright = intent.getBooleanExtra("bright", false);
         if (intent.getBooleanExtra("strobe", false)) {
-            this.mStrobePeriod = intent.getIntExtra("period", 200) / 4;
+            int strobePeriod = intent.getIntExtra("period", 5);
+            if (strobePeriod == 0){
+                strobePeriod = 1;
+            }
+            this.mStrobePeriod = (666 / strobePeriod) / 4;
             this.mStrobeTimer.schedule(this.mStrobeTask, 0, this.mStrobePeriod);
         } else {
             this.mTorchTimer.schedule(this.mTorchTask, 0, 100);
@@ -123,11 +111,10 @@ public class TorchService extends Service {
 
     public void onDestroy() {
         this.mNotificationManager.cancelAll();
-        this.unregisterReceiver(this.mReceiver);
         stopForeground(true);
         this.mTorchTimer.cancel();
         this.mStrobeTimer.cancel();
-        FlashDevice.instance(mContext).setFlashMode(FlashDevice.OFF, mBright);
+        FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.OFF, mBright);
         updateState(false);
     }
 

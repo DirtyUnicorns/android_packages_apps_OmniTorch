@@ -15,19 +15,15 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class SeekBarPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
+public class StrobeFreqPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
 
     private SeekBar mSeekBar;
-
     private TextView mSplashText, mValueText;
-
     private Context mContext;
-
     private String mDialogMessage, mSuffix;
-
     private int mDefault, mMax, mValue = 0;
 
-    public SeekBarPreference(Context context, AttributeSet attrs) {
+    public StrobeFreqPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
 
@@ -36,7 +32,6 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
         //has min value of 1hz but displays 0hz
         mDefault = 4;
         mMax = 24;
-
     }
 
     @Override
@@ -101,21 +96,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     public void onStopTrackingTouch(SeekBar seek) {
     }
 
-    public void setMax(int max) {
+    private void setMax(int max) {
         mMax = max;
-    }
-
-    public int getMax() {
-        return mMax;
-    }
-
-    public void setProgress(int progress) {
-        mValue = progress;
-        if (mSeekBar != null)
-            mSeekBar.setProgress(progress);
-    }
-
-    public int getProgress() {
-        return mValue;
     }
 }

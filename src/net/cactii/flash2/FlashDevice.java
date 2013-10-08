@@ -7,9 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import net.cactii.flash2.R;
 import android.content.Context;
-import android.util.Log;
 
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
@@ -17,10 +15,8 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
 public class FlashDevice {
+    private static final String TAG = "TorchDevice";
 
-    private static final String MSG_TAG = "TorchDevice";
-
-    /* New variables, init'ed by resource items */
     private static int mValueOff;
     private static int mValueOn;
     private static int mValueLow;
@@ -34,9 +30,9 @@ public class FlashDevice {
     public static final int OFF       = 0;
     public static final int ON        = 1;
 
-    private static FlashDevice instance;
-    private static boolean surfaceCreated = false;
-    private static SurfaceTexture surfaceTexture;
+    private static FlashDevice mInstance;
+    private static boolean mSurfaceCreated = false;
+    private static SurfaceTexture mSurfaceTexture;
 
     private FileWriter mFlashDeviceWriter = null;
     private FileWriter mFlashDeviceLuminosityWriter = null;
@@ -61,26 +57,22 @@ public class FlashDevice {
         }
     }
 
-    public static synchronized FlashDevice instance(Context context) {
-        if (instance == null) {
-            instance = new FlashDevice(context);
+    public static synchronized FlashDevice getInstance(Context context) {
+        if (mInstance == null) {
+            mInstance = new FlashDevice(context);
         }
-        return instance;
+        return mInstance;
     }
 
     public synchronized void setFlashMode(int mode, boolean bright) {
-
         if (mode == mFlashMode) {
-            return:
+            return;
         }
         
         try {
             int brightnessValue = 0;
 
             switch (mode) {
-                case STROBE:
-                    brightnessValue = mValueOff;
-                    break;
                 case ON:
                     brightnessValue = mValueOn;
                     if (bright) {
@@ -94,14 +86,14 @@ public class FlashDevice {
                     }
                     break;
                 case OFF:
-                    brightnessValue = mValueOff:
-                    break
+                    brightnessValue = mValueOff;
+                    break;
             }
             if (mUseCameraInterface) {
                 if (mCamera == null) {
                     mCamera = Camera.open();
                 }
-                if (mode == OFF) {
+                if (mode == OFF || mode == STROBE) {
                     mParams = mCamera.getParameters();
                     mParams.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
                     mCamera.setParameters(mParams);
@@ -109,12 +101,12 @@ public class FlashDevice {
                         mCamera.stopPreview();
                         mCamera.release();
                         mCamera = null;
-                        surfaceCreated = false;
+                        mSurfaceCreated = false;
                     }
                     if (mWakeLock.isHeld())
                         mWakeLock.release();
                 } else {
-                    if (!surfaceCreated) {
+                    if (!mSurfaceCreated) {
                         int[] textures = new int[1];
                         // generate one texture pointer and bind it as an
                         // external texture.
@@ -136,9 +128,9 @@ public class FlashDevice {
                                 GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
                                 GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
 
-                        FlashDevice.surfaceTexture = new SurfaceTexture(textures[0]);
-                        mCamera.setPreviewTexture(FlashDevice.surfaceTexture);
-                        surfaceCreated = true;
+                        FlashDevice.mSurfaceTexture = new SurfaceTexture(textures[0]);
+                        mCamera.setPreviewTexture(FlashDevice.mSurfaceTexture);
+                        mSurfaceCreated = true;
                         mCamera.startPreview();
                     }
                     mParams = mCamera.getParameters();
@@ -165,6 +157,10 @@ public class FlashDevice {
                             mFlashDeviceLuminosityWriter.write(String.valueOf(brightnessValue));
                             mFlashDeviceLuminosityWriter.flush();
                             break;
+                        case STROBE:
+                            mFlashDeviceWriter.write(String.valueOf(mValueOff));
+                            mFlashDeviceWriter.flush();
+                            break;
                         case OFF:
                             mFlashDeviceWriter.write(String.valueOf(mValueOff));
                             mFlashDeviceWriter.flush();
@@ -187,6 +183,10 @@ public class FlashDevice {
                             mFlashDeviceWriter.write(String.valueOf(brightnessValue));
                             mFlashDeviceWriter.flush();
                             break;
+                        case STROBE:
+                            mFlashDeviceWriter.write(String.valueOf(mValueOff));
+                            mFlashDeviceWriter.flush();
+                            break;
                         case OFF:
                             mFlashDeviceWriter.write(String.valueOf(brightnessValue));
                             mFlashDeviceWriter.flush();
@@ -202,7 +202,7 @@ public class FlashDevice {
         }
     }
 
-    public synchronized int getFlashMode() {
+    public int getFlashMode() {
         return mFlashMode;
     }
 }

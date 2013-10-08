@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">  
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <PreferenceCategory
-        android:title="@string/widget_options">
+        android:key="@+id/widget_options">
 
             <CheckBoxPreference
                 android:key="widget_bright"
@@ -14,7 +17,7 @@
                 android:title="@string/setting_strobe"
                 android:defaultValue="false" />    
 
-                    <net.cactii.flash2.SeekBarPreference 
+                    <net.cactii.flash2.StrobeFreqPreference
                         android:key="widget_strobe_freq"
                         android:title="@string/setting_frequency_title" />
 
