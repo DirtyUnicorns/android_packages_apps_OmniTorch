@@ -29,6 +29,8 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
+import android.content.Context;
 
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
@@ -38,11 +40,13 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	public static final String KEY_STROBE = "strobe";
 	public static final String KEY_STROBE_FREQ = "strobe_freq";
 	public static final String KEY_SOS = "sos";
+	public static final String KEY_FULLSCREEN = "fullscreen";
 
 	private StrobeFreqPreference mStrobeFrequency;
 	private CheckBoxPreference mBrightPref;
 	private CheckBoxPreference mStrobePref;
 	private CheckBoxPreference mSosPref;
+	private CheckBoxPreference mFullPref;
 	private SharedPreferences mPreferences;
 
 	@SuppressWarnings("deprecation")
@@ -60,6 +64,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		mStrobeFrequency = (StrobeFreqPreference) findPreference(KEY_STROBE_FREQ);
 		mStrobeFrequency.setEnabled(mPreferences.getBoolean(KEY_STROBE, false));
 		mSosPref = (CheckBoxPreference) findPreference(KEY_SOS);
+		mFullPref = (CheckBoxPreference) findPreference(KEY_FULLSCREEN);
 
 		updateEnablement();
 		
@@ -76,6 +81,14 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			updateEnablement();
 			mStrobePref.setChecked(false);
 			mBrightPref.setChecked(false);
+		}
+		if (key.equals(KEY_FULLSCREEN)) {
+			Context ctx = getApplicationContext();
+			Toast.makeText(
+					ctx,
+					R.string.setting_restart,
+					Toast.LENGTH_LONG
+				).show();
 		}
 	}
 

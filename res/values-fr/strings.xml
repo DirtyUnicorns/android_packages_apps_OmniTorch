@@ -35,6 +35,7 @@
     <string name="settings">Paramètres</string>
     <string name="about">À propos</string>
     <string name="widget_options">Options du widget</string>
+    <string name="setting_title_common">Commun</string>
     <string name="setting_bright">Luminosité</string>
     <string name="setting_sos">S.O.S</string>
     <string name="setting_strobe">Flash stroboscopique</string>

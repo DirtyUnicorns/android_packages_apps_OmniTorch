@@ -23,4 +23,9 @@
     <item android:id="@+id/action_settings"
         android:title="@string/settings" />
 
+    <item android:id="@+id/action_sos"
+        android:title="@string/label_sos"
+        android:icon="@drawable/ic_action_sos"
+        android:showAsAction="ifRoom" />
+
 </menu>

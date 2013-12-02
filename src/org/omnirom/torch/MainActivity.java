@@ -34,6 +34,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.util.Log;
 
@@ -51,6 +53,18 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// Get preferences
+		this.mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+		// Fullscreen mode
+		if (mPrefs.getBoolean(SettingsActivity.KEY_FULLSCREEN, false)) {
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
+			this.getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN
+				);
+		}
 		setContentView(R.layout.mainnew);
 		mContext = this.getApplicationContext();
 		mButtonOnView = (ImageView) findViewById(R.id.buttoOnImage);
@@ -60,20 +74,10 @@ public class MainActivity extends Activity {
 				createIntent();
 			}
 		});
-
-		mButtonSosView = (ImageView) findViewById(R.id.buttoSosImage);
-
-		mButtonSosView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				createSosIntent();
-			}
-		});
 		
 		mTorchOn = false;
 		mWidgetProvider = TorchWidgetProvider.getInstance();
 
-		// Preferences
-		this.mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		updateBigButtonState();
 	}
 
@@ -129,6 +133,9 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.action_sos:
+			createSosIntent();
+			return true;
 		case R.id.action_about:
 			this.openAboutDialog();
 			return true;

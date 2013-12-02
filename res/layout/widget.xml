@@ -19,7 +19,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/appwidget_bg"
+    android:background="#90000000"
     android:gravity="center" >
 
     <LinearLayout
@@ -27,7 +27,6 @@
         android:layout_width="0.0dip"
         android:layout_height="match_parent"
         android:layout_weight="1.0"
-        android:background="@drawable/appwidget_button"
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical">
@@ -38,7 +37,7 @@
             android:layout_height="0.0dip"
             android:layout_weight="1.0"
             android:scaleType="center"
-            android:src="@drawable/torch_off" />
+            android:src="@drawable/ic_widget_off" />
 
         <TextView
             android:id="@+id/ind_text"
@@ -51,12 +50,6 @@
             android:textColor="@color/text_color"
             />
 
-        <ImageView
-            android:id="@+id/ind_torch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:src="@drawable/ind_bar_off" />
     </LinearLayout>
 
 </LinearLayout>

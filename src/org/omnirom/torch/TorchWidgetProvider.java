@@ -41,27 +41,22 @@ public class TorchWidgetProvider extends AppWidgetProvider {
 	}
 
 	private enum WidgetState {
-		OFF     (R.drawable.torch_off,R.drawable.ind_bar_off),
-		ON      (R.drawable.torch_on,R.drawable.ind_bar_on);
+		OFF     (R.drawable.ic_widget_off),
+		ON      (R.drawable.ic_widget_on);
 
 		/**
 		 * The drawable resources associated with this widget state.
 		 */
 		private final int mDrawImgRes;
-		private final int mDrawIndRes;
 
-		private WidgetState(int drawImgRes, int drawIndRes) {
+		private WidgetState(int drawImgRes) {
 			mDrawImgRes = drawImgRes;
-			mDrawIndRes = drawIndRes;
 		}
 
 		public int getImgDrawable() {
 			return mDrawImgRes;
 		}
 
-		public int getIndDrawable() {
-			return mDrawIndRes;
-		}
 	}
 
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -132,10 +127,8 @@ public class TorchWidgetProvider extends AppWidgetProvider {
 
 		if (on) {
 			views.setImageViewResource(R.id.img_torch, WidgetState.ON.getImgDrawable());
-			views.setImageViewResource(R.id.ind_torch, WidgetState.ON.getIndDrawable());
 		} else {
 			views.setImageViewResource(R.id.img_torch, WidgetState.OFF.getImgDrawable());
-			views.setImageViewResource(R.id.ind_torch, WidgetState.OFF.getIndDrawable());
 		}
 
 		if (prefs.getBoolean("widget_strobe_" + appWidgetId, false)) {

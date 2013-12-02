@@ -21,7 +21,8 @@
     android:orientation="vertical" >
 
     <PreferenceCategory
-        android:key="+@id:settings">
+        android:key="+@id:settings"
+        android:title="@string/setting_title_common">
 
             <CheckBoxPreference
                 android:key="bright"
@@ -40,6 +41,11 @@
             <CheckBoxPreference
                 android:key="sos"
                 android:title="@string/setting_sos"
+                android:defaultValue="false" />
+
+            <CheckBoxPreference
+                android:key="fullscreen"
+                android:title="@string/setting_fullscreen"
                 android:defaultValue="false" />
                     
 </PreferenceCategory>

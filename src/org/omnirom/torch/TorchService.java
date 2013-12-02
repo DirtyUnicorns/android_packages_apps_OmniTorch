@@ -162,7 +162,7 @@ public class TorchService extends Service {
 			mTorchTimer.schedule(mTorchTask, 0, 100);
 		}
 		mNotificationBuilder = new Notification.Builder(this);
-		mNotificationBuilder.setSmallIcon(R.drawable.torch_on);
+		mNotificationBuilder.setSmallIcon(R.drawable.ic_torch_on);
 		mNotificationBuilder.setTicker(getString(R.string.not_torch_title));
 		mNotificationBuilder.setContentTitle(getString(R.string.not_torch_title));
 		mNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this,
@@ -172,7 +172,7 @@ public class TorchService extends Service {
 
 		PendingIntent turnOff = PendingIntent.getBroadcast(this, 0,
 				new Intent(TorchSwitch.TOGGLE_FLASHLIGHT), 0);
-		mNotificationBuilder.addAction(R.drawable.torch_off,
+		mNotificationBuilder.addAction(R.drawable.ic_launcher,
 				getString(R.string.not_torch_toggle), turnOff);
 
 		mNotification = mNotificationBuilder.getNotification();

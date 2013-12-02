@@ -35,6 +35,7 @@
     <string name="settings">Impostazioni</string>
     <string name="about">Informazioni</string>
     <string name="widget_options">Opzioni widget</string>
+    <string name="setting_title_common">Generali</string>
     <string name="setting_bright">Alta luminosità</string>
     <string name="setting_sos">S.O.S</string>
     <string name="setting_strobe">Lampeggio flash</string>
