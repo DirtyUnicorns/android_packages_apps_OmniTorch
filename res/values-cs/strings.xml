@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (C) 2013 The OmniROM Project
+  parts by Copyright 2013, The CyanogenMod Project
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Svítilna</string>
+    <string name="about_title">O aplikaci</string>
+    <string name="about_close">Zavřít</string>
+
+    <string name="description">Ovládání osvětlení LED fotoaparátu.\n</string>
+    <string name="warning">Upozornění: Pokud ponecháte zapnuté osvětlení LED delší dobu, riskujete jeho přehřátí a poškození.</string>
+    <string name="license">Autorem původního kódu pro Nexus One je Ben Buxton uvolěný pod licencí GPL, v3.\nhttp://n1torch.googlecode.com/\n\nUpraveno pro OmniRom Max Weningerem</string>
+    <string name="warning_label">Upozornění</string>
+    <string name="brightwarn">Vysoký jas byl úspěšně testován po dobu půl hodiny, ale poté bylo osvětlení velmi horké a poblikávalo (dočasně pod dobu 45 minut). Dlouhodobé účinky nejsou známi.\n\nKlikněte na &#8220;Přijmout&#8221; pokud chcete vyzkoušet na vlastní nebezpečí.</string>
+    <string name="brightwarn_negative">Ne děkuji</string>
+    <string name="brightwarn_accept">Přijmout</string>
+
+    <string name="label_on">Zapnout</string>
+    <string name="label_off">Vypnout</string>
+    <string name="label_high">Vysoký</string>
+    <string name="label_strobe">Blikání</string>
+    <string name="label_sos">S.O.S</string>
+
+    <string name="settings">Nastavení</string>
+    <string name="about">O aplikaci</string>
+    <string name="widget_options">Nastavení widgetu</string>
+    <string name="setting_title_common">Obecné</string>
+    <string name="setting_restart">Prosím, restartujte aplikaci</string>
+    <string name="setting_fullscreen">Celá obrazovka</string>
+    <string name="setting_bright">Jas</string>
+    <string name="setting_sos">S.O.S</string>
+    <string name="setting_strobe">Stroboskopický jev</string>
+    <string name="setting_frequency_title">Frekvence blikání</string>
+    <string name="setting_frequency_dialog">Frekvence</string>
+    <string name="setting_frequency_hz"> Hz</string>
+    <string name="setting_add_widget">Přidat widget</string>
+
+    <string name="not_torch_title">Svítilna zapnuta</string>
+    <string name="not_torch_toggle">Svítilna vypnuta</string>
+
+</resources>
