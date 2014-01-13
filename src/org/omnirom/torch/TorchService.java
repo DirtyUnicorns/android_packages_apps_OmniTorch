@@ -31,191 +31,191 @@ import android.util.Log;
 
 public class TorchService extends Service {
 
-	private static final String TAG = "TorchRoot";
+        private static final String TAG = "TorchRoot";
 
-	private TimerTask mTorchTask;
-	private Timer mTorchTimer;
-	private WrapperTask mStrobeTask;
-	private Timer mStrobeTimer;
-	private Timer mSosTimer;
-	private WrapperTask mSosTask;
-	private Runnable mSosOnRunnable;
-	private Runnable mSosOffRunnable;
-	private int mSosCount;
-	private NotificationManager mNotificationManager;
-	private Notification mNotification;
-	private Notification.Builder mNotificationBuilder;
-	private int mStrobePeriod;
-	private boolean mBright;
-	private boolean mSos;
-	private boolean mStrobe;
-	private Runnable mStrobeRunnable;
-	private Context mContext;
+        private TimerTask mTorchTask;
+        private Timer mTorchTimer;
+        private WrapperTask mStrobeTask;
+        private Timer mStrobeTimer;
+        private Timer mSosTimer;
+        private WrapperTask mSosTask;
+        private Runnable mSosOnRunnable;
+        private Runnable mSosOffRunnable;
+        private int mSosCount;
+        private NotificationManager mNotificationManager;
+        private Notification mNotification;
+        private Notification.Builder mNotificationBuilder;
+        private int mStrobePeriod;
+        private boolean mBright;
+        private boolean mSos;
+        private boolean mStrobe;
+        private Runnable mStrobeRunnable;
+        private Context mContext;
 
-	public void onCreate() {
-		String ns = Context.NOTIFICATION_SERVICE;
-		mNotificationManager = (NotificationManager) getSystemService(ns);
-		mContext = getApplicationContext();
+        public void onCreate() {
+                String ns = Context.NOTIFICATION_SERVICE;
+                mNotificationManager = (NotificationManager) getSystemService(ns);
+                mContext = getApplicationContext();
 
-		mTorchTask = new TimerTask() {
-			public void run() {
-				FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.ON, mBright);
-			}
-		};
-		mTorchTimer = new Timer();
+                mTorchTask = new TimerTask() {
+                        public void run() {
+                                FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.ON, mBright);
+                        }
+                };
+                mTorchTimer = new Timer();
 
-		mStrobeRunnable = new Runnable() {
-			private int mCounter = 4;
+                mStrobeRunnable = new Runnable() {
+                        private int mCounter = 4;
 
-			public void run() {
-				int flashMode = FlashDevice.ON;
-				if (FlashDevice.getInstance(mContext).getFlashMode() == FlashDevice.STROBE) {
-					if (mCounter-- < 1) {
-						FlashDevice.getInstance(mContext).setFlashMode(flashMode, mBright);
-					}
-				} else {
-					FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.STROBE, mBright);
-					mCounter = 4;
-				}
-			}
+                        public void run() {
+                                int flashMode = FlashDevice.ON;
+                                if (FlashDevice.getInstance(mContext).getFlashMode() == FlashDevice.STROBE) {
+                                        if (mCounter-- < 1) {
+                                                FlashDevice.getInstance(mContext).setFlashMode(flashMode, mBright);
+                                        }
+                                } else {
+                                        FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.STROBE, mBright);
+                                        mCounter = 4;
+                                }
+                        }
 
-		};
-		mStrobeTask = new WrapperTask(mStrobeRunnable);
-		mStrobeTimer = new Timer();
+                };
+                mStrobeTask = new WrapperTask(mStrobeRunnable);
+                mStrobeTimer = new Timer();
 
-		mSosOnRunnable = new Runnable() {			
-			public void run() {
-				FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.ON, mBright);
-				mSosTask = new WrapperTask(mSosOffRunnable);
-				int schedTime = 0;
-				switch(mSosCount){
-					case 0:
-					case 1:
-					case 2:
-					case 6:
-					case 7:
-					case 8:
-						schedTime = 200;
-						break;
-					case 3:
-					case 4:
-					case 5:
-						schedTime = 600;
-						break;
-					default:
-						return;
-				}
+                mSosOnRunnable = new Runnable() {                        
+                        public void run() {
+                                FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.ON, mBright);
+                                mSosTask = new WrapperTask(mSosOffRunnable);
+                                int schedTime = 0;
+                                switch(mSosCount){
+                                        case 0:
+                                        case 1:
+                                        case 2:
+                                        case 6:
+                                        case 7:
+                                        case 8:
+                                                schedTime = 200;
+                                                break;
+                                        case 3:
+                                        case 4:
+                                        case 5:
+                                                schedTime = 600;
+                                                break;
+                                        default:
+                                                return;
+                                }
                 if (mSosTimer != null){
-				    mSosTimer.schedule(mSosTask, schedTime);
+                                    mSosTimer.schedule(mSosTask, schedTime);
                 }
-			}
-		};
+                        }
+                };
 
-		mSosOffRunnable = new Runnable() {			
-			public void run() {
-				FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.OFF, mBright);
-				mSosTask = new WrapperTask(mSosOnRunnable);
-				mSosCount++;
-				if (mSosCount == 9){
-					mSosCount = 0;
-				}
+                mSosOffRunnable = new Runnable() {                        
+                        public void run() {
+                                FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.OFF, mBright);
+                                mSosTask = new WrapperTask(mSosOnRunnable);
+                                mSosCount++;
+                                if (mSosCount == 9){
+                                        mSosCount = 0;
+                                }
                 if (mSosTimer != null){
-				    mSosTimer.schedule(mSosTask, mSosCount == 0 ? 2000:200);
+                                    mSosTimer.schedule(mSosTask, mSosCount == 0 ? 2000:200);
                 }
-			}
-		};
+                        }
+                };
 
-		mSosTask = new WrapperTask(mSosOnRunnable);
-		mSosTimer = new Timer();
-	}
+                mSosTask = new WrapperTask(mSosOnRunnable);
+                mSosTimer = new Timer();
+        }
 
-	public int onStartCommand(Intent intent, int flags, int startId) {
+        public int onStartCommand(Intent intent, int flags, int startId) {
 
-		Log.d(TAG, "Starting torch");
-		if (intent == null) {
-			stopSelf();
-			return START_NOT_STICKY;
-		}
-		mBright = intent.getBooleanExtra("bright", false);
-		mStrobe = intent.getBooleanExtra("strobe", false);
-		mSos = intent.getBooleanExtra("sos", false);
+                Log.d(TAG, "Starting torch");
+                if (intent == null) {
+                        stopSelf();
+                        return START_NOT_STICKY;
+                }
+                mBright = intent.getBooleanExtra("bright", false);
+                mStrobe = intent.getBooleanExtra("strobe", false);
+                mSos = intent.getBooleanExtra("sos", false);
 
-		int strobePeriod = intent.getIntExtra("period", 5);
-		if (strobePeriod == 0){
-			strobePeriod = 1;
-		}
-		mStrobePeriod = (666 / strobePeriod) / 4;
+                int strobePeriod = intent.getIntExtra("period", 5);
+                if (strobePeriod == 0){
+                        strobePeriod = 1;
+                }
+                mStrobePeriod = (666 / strobePeriod) / 4;
 
-		if (mSos){
-			mBright = true;
-			mStrobe = false;
-		}
+                if (mSos){
+                        mBright = true;
+                        mStrobe = false;
+                }
 
-		Log.d(TAG, "onStartCommand mBright = " + mBright + " mStrobe = " + 
-					mStrobe + " mStrobePeriod = " + mStrobePeriod + "mSos = " + mSos);
-		
-		if (mSos){
-			mSosTimer.schedule(mSosTask, 0);				
-		} else if (mStrobe) {
-			mStrobeTimer.schedule(mStrobeTask, 0, mStrobePeriod);
-		} else {
-			mTorchTimer.schedule(mTorchTask, 0, 100);
-		}
-		mNotificationBuilder = new Notification.Builder(this);
-		mNotificationBuilder.setSmallIcon(R.drawable.ic_torch_on);
-		mNotificationBuilder.setTicker(getString(R.string.not_torch_title));
-		mNotificationBuilder.setContentTitle(getString(R.string.not_torch_title));
-		mNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this,
-				MainActivity.class), 0));
-		mNotificationBuilder.setAutoCancel(false);
-		mNotificationBuilder.setOngoing(true);
+                Log.d(TAG, "onStartCommand mBright = " + mBright + " mStrobe = " +
+                                        mStrobe + " mStrobePeriod = " + mStrobePeriod + "mSos = " + mSos);
 
-		PendingIntent turnOff = PendingIntent.getBroadcast(this, 0,
-				new Intent(TorchSwitch.TOGGLE_FLASHLIGHT), 0);
-		mNotificationBuilder.addAction(R.drawable.ic_launcher,
-				getString(R.string.not_torch_toggle), turnOff);
+                if (mSos){
+                        mSosTimer.schedule(mSosTask, 0);                                
+                } else if (mStrobe) {
+                        mStrobeTimer.schedule(mStrobeTask, 0, mStrobePeriod);
+                } else {
+                        mTorchTimer.schedule(mTorchTask, 0, 100);
+                }
+                mNotificationBuilder = new Notification.Builder(this);
+                mNotificationBuilder.setSmallIcon(R.drawable.ic_torch_on);
+                mNotificationBuilder.setTicker(getString(R.string.not_torch_title));
+                mNotificationBuilder.setContentTitle(getString(R.string.not_torch_title));
+                mNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this,
+                                MainActivity.class), 0));
+                mNotificationBuilder.setAutoCancel(false);
+                mNotificationBuilder.setOngoing(true);
 
-		mNotification = mNotificationBuilder.getNotification();
-		mNotificationManager.notify(getString(R.string.app_name).hashCode(), mNotification);
+                PendingIntent turnOff = PendingIntent.getBroadcast(this, 0,
+                                new Intent(TorchSwitch.TOGGLE_FLASHLIGHT), 0);
+                mNotificationBuilder.addAction(R.drawable.ic_torch_on,
+                                getString(R.string.not_torch_toggle), turnOff);
 
-		startForeground(getString(R.string.app_name).hashCode(), mNotification);
-		updateState(true);
-		return START_STICKY;
-	}
+                mNotification = mNotificationBuilder.getNotification();
+                mNotificationManager.notify(getString(R.string.app_name).hashCode(), mNotification);
 
-	public void onDestroy() {
-		mNotificationManager.cancelAll();
-		stopForeground(true);
-		mTorchTimer.cancel();
+                startForeground(getString(R.string.app_name).hashCode(), mNotification);
+                updateState(true);
+                return START_STICKY;
+        }
+
+        public void onDestroy() {
+                mNotificationManager.cancelAll();
+                stopForeground(true);
+                mTorchTimer.cancel();
         mTorchTimer = null;
-		mStrobeTimer.cancel();
+                mStrobeTimer.cancel();
         mStrobeTimer = null;
-		mSosTimer.cancel();
+                mSosTimer.cancel();
         mSosTimer = null;
-		FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.OFF, mBright);
-		updateState(false);
-	}
+                FlashDevice.getInstance(mContext).setFlashMode(FlashDevice.OFF, mBright);
+                updateState(false);
+        }
 
-	private void updateState(boolean on) {
-		Intent intent = new Intent(TorchSwitch.TORCH_STATE_CHANGED);
-		intent.putExtra("state", on ? 1 : 0);
-		sendStickyBroadcast(intent);
-	}
+        private void updateState(boolean on) {
+                Intent intent = new Intent(TorchSwitch.TORCH_STATE_CHANGED);
+                intent.putExtra("state", on ? 1 : 0);
+                sendStickyBroadcast(intent);
+        }
 
-	public class WrapperTask extends TimerTask {
-		private final Runnable mTarget;
+        public class WrapperTask extends TimerTask {
+                private final Runnable mTarget;
 
-		public WrapperTask(Runnable target) {
-			mTarget = target;
-		}
+                public WrapperTask(Runnable target) {
+                        mTarget = target;
+                }
 
-		public void run() {
-			mTarget.run();
-		}
-	}
+                public void run() {
+                        mTarget.run();
+                }
+        }
 
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
-	}
+        @Override
+        public IBinder onBind(Intent intent) {
+                return null;
+        }
 }
