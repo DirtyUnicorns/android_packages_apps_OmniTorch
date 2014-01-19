@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.omnirom.torch">
+    package="org.omnirom.torch"
+    android:sharedUserId="android.uid.system">
 
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="18" />
         
