@@ -31,54 +31,53 @@ import android.preference.PreferenceManager;
 
 public class TorchSwitch extends BroadcastReceiver {
 
-        public static final String TOGGLE_FLASHLIGHT = "org.omnirom.torch.TOGGLE_FLASHLIGHT";
-        public static final String TORCH_STATE_CHANGED = "org.omnirom.torch.TORCH_STATE_CHANGED";
+    public static final String TOGGLE_FLASHLIGHT = "org.omnirom.torch.TOGGLE_FLASHLIGHT";
+    public static final String FLASHLIGHT_OFF = "org.omnirom.torch.FLASHLIGHT_OFF";
+    public static final String FLASHLIGHT_ON = "org.omnirom.torch.FLASHLIGHT_ON";
+    public static final String TORCH_STATE_CHANGED = "org.omnirom.torch.TORCH_STATE_CHANGED";
 
-        private SharedPreferences mPrefs;
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        // bright setting can come from intent or from prefs depending on
+        // on what send the broadcast
+        //
+        // Unload intent extras if they exist:
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean bright = intent.getBooleanExtra("bright", prefs.getBoolean("bright", false));
+        boolean strobe = intent.getBooleanExtra("strobe", prefs.getBoolean("strobe", false));
+        int period = intent.getIntExtra("period", 200);
 
-        @Override
-        public void onReceive(Context context, Intent receivingIntent) {
-                mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                if (receivingIntent.getAction().equals(TOGGLE_FLASHLIGHT)) {
-                        // bright setting can come from intent or from prefs depending on
-                        // on what send the broadcast
-                        //
-                        // Unload intent extras if they exist:
-                        boolean bright = receivingIntent.getBooleanExtra("bright", false) |
-                                        mPrefs.getBoolean("bright", false);
-                        boolean strobe = receivingIntent.getBooleanExtra("strobe", false) |
-                                        mPrefs.getBoolean("strobe", false);
-                        boolean sos = receivingIntent.getBooleanExtra("sos", false) |
-                                        mPrefs.getBoolean("sos", false);
-
-                        int period = receivingIntent.getIntExtra("period", 200);
-                        Intent i = new Intent(context, TorchService.class);
-                        if (this.TorchServiceRunning(context)) {
-                                context.stopService(i);
-                        } else {
-                                i.putExtra("bright", bright);
-                                i.putExtra("strobe", strobe);
-                                i.putExtra("period", period);
-                                i.putExtra("sos", sos);
-
-                                context.startService(i);
-                        }
-                }
+        Intent i = new Intent(context, TorchService.class);
+        if (action.equals(TOGGLE_FLASHLIGHT)) {
+            if (this.torchServiceRunning(context)) {
+                context.stopService(i);
+            } else {
+                i.putExtra("bright", bright);
+                i.putExtra("strobe", strobe);
+                i.putExtra("period", period);
+                context.startService(i);
+            }
+        } else if (action.equals(FLASHLIGHT_ON)) {
+            i.putExtra("bright", bright);
+            i.putExtra("strobe", strobe);
+            i.putExtra("period", period);
+            context.startService(i);
+        } else if (action.equals(FLASHLIGHT_OFF)) {
+            context.stopService(i);
         }
+    }
 
-        private boolean TorchServiceRunning(Context context) {
-                ActivityManager am = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
+    private boolean torchServiceRunning(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> svcList = am.getRunningServices(100);
 
-                List<ActivityManager.RunningServiceInfo> svcList = am.getRunningServices(100);
-
-                if (!(svcList.size() > 0))
-                        return false;
-                for (RunningServiceInfo serviceInfo : svcList) {
-                        ComponentName serviceName = serviceInfo.service;
-                        if (serviceName.getClassName().endsWith(".TorchService")
-                                        || serviceName.getClassName().endsWith(".RootTorchService"))
-                                return true;
-                }
-                return false;
+        for (RunningServiceInfo serviceInfo : svcList) {
+            ComponentName serviceName = serviceInfo.service;
+            if (serviceName.getClassName().endsWith(".TorchService")
+                    || serviceName.getClassName().endsWith(".RootTorchService"))
+                return true;
         }
+        return false;
+    }
 }

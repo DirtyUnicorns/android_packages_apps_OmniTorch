@@ -46,6 +46,8 @@
         <receiver android:name="TorchSwitch" android:enabled="true" android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="org.omnirom.torch.TOGGLE_FLASHLIGHT"></action>
+                <action android:name="org.omnirom.torch.FLASHLIGHT_OFF"></action>
+                <action android:name="org.omnirom.torch.FLASHLIGHT_ON"></action>
             </intent-filter>
         </receiver>
     </application>
