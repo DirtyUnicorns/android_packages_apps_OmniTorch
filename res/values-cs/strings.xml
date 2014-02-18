@@ -21,17 +21,17 @@
     <string name="about_title">O aplikaci</string>
     <string name="about_close">Zavřít</string>
 
-    <string name="description">Ovládání osvětlení LED fotoaparátu.\n</string>
-    <string name="warning">Upozornění: Pokud ponecháte zapnuté osvětlení LED delší dobu, riskujete jeho přehřátí a poškození.</string>
-    <string name="license">Autorem původního kódu pro Nexus One je Ben Buxton uvolěný pod licencí GPL, v3.\nhttp://n1torch.googlecode.com/\n\nUpraveno pro OmniRom Max Weningerem</string>
+    <string name="description">Tato aplikace používá blesk fotoaparátu jako svítilnu.\n</string>
+    <string name="warning">Upozornění: pokud ponecháte svítilnu zapnutou příliš dlouho, riskujete přehřátí a poškození blesku.</string>
+    <string name="license">Autorem původního kódu pro Nexus One, který je uvolněný pod licencí GPLv3, je Ben Buxton.\nhttp://n1torch.googlecode.com/\n\nPro OmniRom upravil Max Weninger</string>
     <string name="warning_label">Upozornění</string>
-    <string name="brightwarn">Vysoký jas byl úspěšně testován po dobu půl hodiny, ale poté bylo osvětlení velmi horké a poblikávalo (dočasně pod dobu 45 minut). Dlouhodobé účinky nejsou známi.\n\nKlikněte na &#8220;Přijmout&#8221; pokud chcete vyzkoušet na vlastní nebezpečí.</string>
-    <string name="brightwarn_negative">Ne děkuji</string>
+    <string name="brightwarn">Příliš dlouhé používání svítilny s nastaveným vysokým jasem může způsobit trvalé poškození LED diody blesku. Při testování této funkce se LED dioda velmi zahřívala a po cca 45 minutách začala poblikávat. Dlouhodobé účinky nejsou známy.\n\nKlikněte na &#8220;Přijmout&#8221;, pokud chcete na vlastní nebezpečí zapnout vysoký jas.</string>
+    <string name="brightwarn_negative">Ne, děkuji</string>
     <string name="brightwarn_accept">Přijmout</string>
 
     <string name="label_on">Zapnout</string>
     <string name="label_off">Vypnout</string>
-    <string name="label_high">Vysoký</string>
+    <string name="label_high">Vysoký jas</string>
     <string name="label_strobe">Blikání</string>
     <string name="label_sos">S.O.S</string>
 
@@ -41,7 +41,7 @@
     <string name="setting_title_common">Obecné</string>
     <string name="setting_restart">Prosím, restartujte aplikaci</string>
     <string name="setting_fullscreen">Celá obrazovka</string>
-    <string name="setting_bright">Jas</string>
+    <string name="setting_bright">Vysoký jas</string>
     <string name="setting_sos">S.O.S</string>
     <string name="setting_strobe">Stroboskopický jev</string>
     <string name="setting_frequency_title">Frekvence blikání</string>
