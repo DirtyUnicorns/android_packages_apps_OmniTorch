@@ -21,8 +21,7 @@
     android:orientation="vertical" >
 
     <PreferenceCategory
-        android:key="+@id:settings"
-        android:title="@string/setting_title_common">
+        android:key="settings">
 
             <CheckBoxPreference
                 android:key="bright"
@@ -34,9 +33,9 @@
                 android:title="@string/setting_strobe"
                 android:defaultValue="false" />    
 
-                    <org.omnirom.torch.StrobeFreqPreference
-                        android:key="strobe_freq"
-                        android:title="@string/setting_frequency_title" />
+            <org.omnirom.torch.StrobeFreqPreference
+                android:key="strobe_freq"
+                android:title="@string/setting_frequency_title" />
 
             <CheckBoxPreference
                 android:key="sos"
@@ -48,6 +47,6 @@
                 android:title="@string/setting_fullscreen"
                 android:defaultValue="false" />
                     
-</PreferenceCategory>
+    </PreferenceCategory>
 
 </PreferenceScreen>  

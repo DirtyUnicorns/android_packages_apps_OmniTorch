@@ -21,7 +21,7 @@
     android:orientation="vertical" >
 
     <PreferenceCategory
-        android:key="@+id/widget_options">
+        android:key="widget_options">
 
             <CheckBoxPreference
                 android:key="widget_bright"
@@ -33,9 +33,9 @@
                 android:title="@string/setting_strobe"
                 android:defaultValue="false" />    
 
-                    <org.omnirom.torch.StrobeFreqPreference
-                        android:key="widget_strobe_freq"
-                        android:title="@string/setting_frequency_title" />
+            <org.omnirom.torch.StrobeFreqPreference
+                android:key="widget_strobe_freq"
+                android:title="@string/setting_frequency_title" />
 
             <CheckBoxPreference
                 android:key="widget_sos"
