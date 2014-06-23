@@ -49,6 +49,6 @@
     <string name="setting_frequency_hz"> Hz</string>
     <string name="setting_add_widget">Añadir widget</string>
 
-    <string name="not_torch_title">Activar antorcha</string>
-    <string name="not_torch_toggle">Desactivar antorcha</string>
+    <string name="not_torch_title">Activar linterna</string>
+    <string name="not_torch_toggle">Desactivar linterna</string>
 </resources>
